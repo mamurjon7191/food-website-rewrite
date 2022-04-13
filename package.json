@@ -1,0 +1,28 @@
+{
+  "name": "food-website-rewrite",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mamurjon7191/food-website-rewrite.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mamurjon7191/food-website-rewrite/issues"
+  },
+  "homepage": "https://github.com/mamurjon7191/food-website-rewrite#readme",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.4.1",
+    "parcel": "^2.4.1"
+  },
+  "dependencies": {
+    "core-js": "^3.21.1",
+    "lodash-es": "^4.17.21",
+    "regenerator-runtime": "^0.13.9"
+  }
+}
