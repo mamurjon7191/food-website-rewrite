@@ -520,11 +520,15 @@ var _modelJs = require("./model.js");
 var _viewJs = require("./view.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
 const controlInfo = async function() {
-    const a = await _modelJs.getInfo('spider');
+    const movieName = _viewJsDefault.default.takingValue();
+    const a = await _modelJs.getInfo(movieName);
     console.log(a);
     _viewJsDefault.default.rendor(a);
 };
-controlInfo();
+const init = function() {
+    _viewJsDefault.default.addHandleFunc(controlInfo);
+};
+init();
 
 },{"./model.js":"Y4A21","./view.js":"ky8MP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","regenerator-runtime":"dXNgZ"}],"Y4A21":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -1167,6 +1171,8 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 class rendorHtml {
     #parentElement = document.querySelector('.movie-list');
+    #form = document.querySelector('.form');
+    #input = document.querySelector('.search');
     #data;
     rendor(data) {
         this.#data = data;
@@ -1181,8 +1187,7 @@ class rendorHtml {
       <img class="movie-list-item-img" alt="" src="${element.Poster}" />
       <span class="movie-list-item-title">${element.Title}</span>
       <p class="movie-list-item-desc">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-        hic fugit similique accusantium.
+        Created:${element.Year}
       </p>
       <button class="movie-list-item-button">Watch</button>
     </div>`;
@@ -1191,6 +1196,16 @@ class rendorHtml {
     }
      #clearHtml() {
         this.#parentElement.innerHTML = '';
+    }
+    takingValue() {
+        const value = this.#input.value;
+        return value;
+    }
+    addHandleFunc(handle) {
+        this.#form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            handle();
+        });
     }
 }
 exports.default = new rendorHtml();

@@ -1,5 +1,7 @@
 class rendorHtml {
   #parentElement = document.querySelector('.movie-list');
+  #form = document.querySelector('.form');
+  #input = document.querySelector('.search');
   #data;
   rendor(data) {
     this.#data = data;
@@ -14,8 +16,7 @@ class rendorHtml {
       <img class="movie-list-item-img" alt="" src="${element.Poster}" />
       <span class="movie-list-item-title">${element.Title}</span>
       <p class="movie-list-item-desc">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-        hic fugit similique accusantium.
+        Created:${element.Year}
       </p>
       <button class="movie-list-item-button">Watch</button>
     </div>`;
@@ -24,6 +25,16 @@ class rendorHtml {
   }
   #clearHtml() {
     this.#parentElement.innerHTML = '';
+  }
+  takingValue() {
+    const value = this.#input.value;
+    return value;
+  }
+  addHandleFunc(handle) {
+    this.#form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      handle();
+    });
   }
 }
 export default new rendorHtml();

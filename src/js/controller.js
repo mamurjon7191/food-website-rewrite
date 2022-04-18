@@ -3,8 +3,12 @@ import * as model from './model.js';
 import view from './view.js';
 
 const controlInfo = async function () {
-  const a = await model.getInfo('spider');
+  const movieName = view.takingValue();
+  const a = await model.getInfo(movieName);
   console.log(a);
   view.rendor(a);
 };
-controlInfo();
+const init = function () {
+  view.addHandleFunc(controlInfo);
+};
+init();
