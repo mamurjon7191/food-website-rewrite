@@ -1,18 +1,13 @@
-import { API_URL } from './config.js';
-import { func } from './helper.js';
+import { async } from 'regenerator-runtime';
+import { helper } from './helper.js';
+import { config } from './config.js';
+
 export const state = {
-  obj: {},
+  results: {},
 };
 
-export let model = async function (id) {
-  let a = await func(API_URL + id);
-  const obj = a.data.recipe;
-  state.obj = {
-    id: obj.id,
-    image_url: obj.image_url,
-    ingredient: obj.ingredients,
-    title: obj.title,
-    servings: obj.servings,
-    time: obj.cooking_time,
-  };
+export const getInfo = async function (movieName) {
+  const a = await helper(config(movieName));
+  state.results = a.Search;
+  return state.results;
 };

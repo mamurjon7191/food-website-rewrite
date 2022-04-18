@@ -1,1 +1,4 @@
-export const API_URL = 'https://forkify-api.herokuapp.com/api/v2/recipes/';
+export const config = function (movieName) {
+  const API = `https://omdbapi.com/?s=${movieName}&page=1&apikey=fc1fef96`;
+  return API;
+};
