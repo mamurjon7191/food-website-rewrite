@@ -150,7 +150,7 @@ body {
 }
 
 .movie-list-container {
-  padding: 0 20px;
+  padding: 2rem 20px;
 }
 
 .movie-list-wrapper {
@@ -282,6 +282,20 @@ body {
   height: 30px;
   outline: none;
   font-size: 1.2rem;
+}
+
+.pagination {
+  width: 100%;
+  justify-content: space-between;
+  display: flex;
+}
+
+.pagination .left, .pagination .right {
+  cursor: pointer;
+  background-color: #0ff;
+  border-radius: 50%;
+  padding: 0 .5rem;
+  font-size: 5rem;
 }
 
 /*# sourceMappingURL=index.3a01df49.css.map */

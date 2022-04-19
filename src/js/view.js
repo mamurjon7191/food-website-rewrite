@@ -9,7 +9,6 @@ class rendorHtml {
     this.#generateHtml();
   }
   #generateHtml() {
-    console.log(2);
     this.#data.forEach(element => {
       let html = `
       <div class="movie-list-item">

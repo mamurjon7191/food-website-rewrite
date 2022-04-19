@@ -519,37 +519,24 @@ var _regeneratorRuntime = require("regenerator-runtime");
 var _modelJs = require("./model.js");
 var _viewJs = require("./view.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+var _paginationJs = require("./pagination.js");
+var _paginationJsDefault = parcelHelpers.interopDefault(_paginationJs);
 const controlInfo = async function() {
     const movieName = _viewJsDefault.default.takingValue();
     const a = await _modelJs.getInfo(movieName);
-    console.log(a);
-    _viewJsDefault.default.rendor(a);
+    _paginationJsDefault.default.rendor(_modelJs.state);
+    _viewJsDefault.default.rendor(_modelJs.pageModel());
+};
+const controlPage = function(page) {
+    _viewJsDefault.default.rendor(_modelJs.pageModel(page));
 };
 const init = function() {
     _viewJsDefault.default.addHandleFunc(controlInfo);
+    _paginationJsDefault.default.addHandleFunc(controlPage);
 };
 init();
 
-},{"./model.js":"Y4A21","./view.js":"ky8MP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","regenerator-runtime":"dXNgZ"}],"Y4A21":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "state", ()=>state
-);
-parcelHelpers.export(exports, "getInfo", ()=>getInfo
-);
-var _regeneratorRuntime = require("regenerator-runtime");
-var _helperJs = require("./helper.js");
-var _configJs = require("./config.js");
-const state = {
-    results: {}
-};
-const getInfo = async function(movieName) {
-    const a = await _helperJs.helper(_configJs.config(movieName));
-    state.results = a.Search;
-    return state.results;
-};
-
-},{"regenerator-runtime":"dXNgZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./helper.js":"lVRAz","./config.js":"k5Hzs"}],"dXNgZ":[function(require,module,exports) {
+},{"regenerator-runtime":"dXNgZ","./model.js":"Y4A21","./view.js":"ky8MP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./pagination.js":"9j1Dd"}],"dXNgZ":[function(require,module,exports) {
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
  *
@@ -1115,7 +1102,47 @@ try {
     else Function("r", "regeneratorRuntime = r")(runtime);
 }
 
-},{}],"gkKU3":[function(require,module,exports) {
+},{}],"Y4A21":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "state", ()=>state
+);
+parcelHelpers.export(exports, "getInfo", ()=>getInfo
+);
+parcelHelpers.export(exports, "pageModel", ()=>pageModel
+);
+var _regeneratorRuntime = require("regenerator-runtime");
+var _helperJs = require("./helper.js");
+var _configJs = require("./config.js");
+const state = {
+    results: [],
+    page: 1
+};
+const getInfo = async function(movieName) {
+    const a = await _helperJs.helper(_configJs.config(movieName));
+    state.results = a.Search;
+    return state.results;
+};
+const pageModel = function(page = state.page) {
+    state.page = page;
+    const start = 4 * (page - 1);
+    const end = page * 4;
+    const a = state.results.slice(start, end);
+    return a;
+};
+
+},{"regenerator-runtime":"dXNgZ","./helper.js":"lVRAz","./config.js":"k5Hzs","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lVRAz":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "helper", ()=>helper
+);
+const helper = async function(url) {
+    const data = await fetch(url);
+    const dataJson = await data.json();
+    return dataJson;
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -1145,18 +1172,7 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"lVRAz":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "helper", ()=>helper
-);
-const helper = async function(url) {
-    const data = await fetch(url);
-    const dataJson = await data.json();
-    return dataJson;
-};
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"k5Hzs":[function(require,module,exports) {
+},{}],"k5Hzs":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "config", ()=>config
@@ -1180,7 +1196,6 @@ class rendorHtml {
         this.#generateHtml();
     }
      #generateHtml() {
-        console.log(2);
         this.#data.forEach((element)=>{
             let html = `
       <div class="movie-list-item">
@@ -1209,6 +1224,55 @@ class rendorHtml {
     }
 }
 exports.default = new rendorHtml();
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9j1Dd":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+class Pagination {
+    #parentElement = document.querySelector('.pagination');
+    //   <div class="pagination">
+    //   <div class="left">&#8592;</div>
+    //   <div class="right">&#8594;</div>
+    // </div>
+    #data;
+    rendor(data) {
+        this.#data = data;
+        this.clearHtml();
+        this.pagination(this.#data);
+    }
+    pagination(abyect) {
+        const lastPage = Math.ceil(abyect.results.length / 4);
+        const currentPage = abyect.page;
+        //oxirgi page
+        if (lastPage == currentPage && lastPage > 1) {
+            let html = `<div class="left btn" id="${abyect.page - 1}">&#8592;</div>`;
+            this.#parentElement.insertAdjacentHTML('beforeend', html);
+        }
+        //birinchi page
+        if (1 == currentPage && lastPage > 1) {
+            let html = `<div class="right btn" id="${abyect.page + 1}">&#8594;</div>`;
+            this.#parentElement.insertAdjacentHTML('beforeend', html);
+        }
+        //ortada
+        if (lastPage > currentPage && currentPage > 1) {
+            let html = `  <div class="left btn" id="${abyect.page - 1}">&#8592;</div>
+         <div class="right btn" id="${abyect.page + 1}">&#8594;</div>`;
+            this.#parentElement.insertAdjacentHTML('beforeend', html);
+        }
+    }
+    clearHtml() {
+        this.#parentElement.innerHTML = '';
+    }
+    addHandleFunc(page) {
+        this.#parentElement.addEventListener('click', function(e) {
+            const btn = e.target.closest('.btn');
+            const id = +btn.getAttribute('id');
+            page(id);
+            console.log(id);
+        });
+    }
+}
+exports.default = new Pagination();
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["ddCAb","aenu9"], "aenu9", "parcelRequire80f6")
 
